@@ -72,6 +72,7 @@ function scatterPCA(data) {
     svg.selectAll("dot")
         .data(data)
         .enter().append("circle")
+        .attr("class", "circle")
         .attr("r", 5)
         .attr("cx", (d) => { return x(d.x); })
         .attr("cy", (d) => { return y(d.y); })
