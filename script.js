@@ -165,7 +165,7 @@ function scatterPCA(data) {
             d3.selectAll("path.line")
                 .style("fill", "white");
             d3.select("path.line.id"+i)
-                .style("fill", "#ba3d43");
+                .style("fill", "#EF9A9A");
         });
 }
 
