@@ -5,14 +5,15 @@ var margin = { top: 20, right: 60, bottom: 30, left: 50 },
 
 // Get and transform hands_pca data into x and y coordinates
 function getPCAHands(callback) {
+    var c = 0;
     d3.text("./hands_pca.csv", function (text) {
         var data = d3.csvParseRows(text).map(function (row) {
 
             var rowItem = row.map(function (value) {
                 return +value;
             }).splice(0, 2);
-
-            return { 'x': rowItem[0], 'y': rowItem[1], 'selected': false };
+            c += 1;
+            return { 'x': rowItem[0], 'y': rowItem[1], 'selected': false, 'label': c};
         });
         callback(data);
     });
@@ -68,6 +69,10 @@ handSVG.append("text")
 var multipleHands = createMultipleHands();
 
 function scatterPCA(data) {
+    // Define the div for the tooltip
+    var div = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
 
     // set the ranges
     var x = d3.scaleLinear().range([0, width]);
@@ -118,6 +123,19 @@ function scatterPCA(data) {
         .attr("class", "circle")
         .attr("cx", (d) => { return x(d.x); })
         .attr("cy", (d) => { return y(d.y); })
+        .on("mouseover", function(d) {
+            div.transition()
+                .duration(200)
+                .style("opacity", .9);
+            div	.html(d.label)
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+        })
+        .on("mouseout", function(d) {
+            div.transition()
+                .duration(500)
+                .style("opacity", 0);
+        });
 
     // style the circles
     var circleStyling = (circles) => {
@@ -178,7 +196,7 @@ function createMultipleHands() {
         if (count >= maxCount - 1) {
             countY += 1;
         }
-        console.log(countY);
+        // console.log(countY);
         count = count >= maxCount - 1 ? 0 : count += 1;
 
     }
@@ -235,7 +253,7 @@ function plotHand(id, svg, height, width) {
             .attr('stroke-dasharray', '2400 2400')
             .attr('stroke-dashoffset', 2400)
             .transition()
-            .duration(1000)
+            .duration(4000)
             .attr('stroke-dashoffset', 0);
     });
 }
