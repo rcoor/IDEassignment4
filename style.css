@@ -30,6 +30,10 @@ path {
     stroke: #ba3d43;
 }
 
+.handsOverview path {
+    stroke: #ba3d43;
+}
+
 .circle:hover {
     fill: #ba3d43;
 }

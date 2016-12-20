@@ -140,9 +140,40 @@ function scatterPCA(data) {
                 .attr("cy", y(d.y))
                 .attr("r", 4);
 
-            plotHand(i, handSVG);
+            plotHand(i, handSVG, height, width);
         });
 }
+
+function createMultipleHands() {
+    var svg = d3.select("svg.allHands")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom);
+
+    count = 0;
+    maxCount = 8;
+    countY = 0;
+    maxCountY = 40 / maxCount;
+    for (i = 0; i < 40; i++) {
+        var newHeight = (height / maxCount);
+        var newWidth = (width / maxCount);
+        svg2 = svg.append("svg")
+            .attr("width", newWidth)
+            .attr("height", newHeight)
+            .attr("x", newWidth * count)
+            .attr("y", newHeight * countY)
+            .attr("class", "handsOverview");
+        plotHand(i, svg2, newHeight, newWidth);
+        if (count >= maxCount - 1) {
+            countY += 1;
+        }
+        console.log(countY);
+        count = count >= maxCount - 1 ? 0 : count += 1;
+
+    }
+
+}
+
+createMultipleHands();
 
 function createHandSvg() {
     return svg = d3.select("svg.hands")
@@ -153,11 +184,13 @@ function createHandSvg() {
         "translate(" + margin.left + "," + margin.top + ")");
 }
 
-function plotHand(id, svg) {
+function plotHand(id, svg, height, width) {
     getHands((hands) => {
         svg.selectAll("path").remove();
         svg.select("g").remove();
         var data = hands[id];
+
+
 
         // set the ranges
         var x = d3.scaleLinear().range([0, width]);
