@@ -98,19 +98,19 @@ function scatterPCA(data) {
 
 
     svg.append("text")
-        .text("PC 2")
-        .attr("x", width / 2 - 20)
-        .attr("y", height + margin.bottom);
+        .text("Principal Component 2")
+        .attr("x", width / 2 - 50)
+        .attr("y", height + margin.bottom-5);
 
     svg.append("text")
-        .text("PC 1")
-        .attr("x", - width / 2)
+        .text("Principal Component 1")
+        .attr("x", - width / 2-50)
         .attr("transform", "rotate(-90)")
         .attr("y", -20);
 
     // text inside the PCA plot
-    var xPos = 20;
-    var yPos = 50;
+    var xPos = 10;
+    var yPos = 10;
     svg.append("text")
         .text("40 hands")
         .attr("x", xPos)
@@ -124,7 +124,7 @@ function scatterPCA(data) {
         .attr("class", "inPlotTextExplanation");
 
     svg.append("text")
-        .text("Either click or drag")
+        .text("Either click or drag starting from a point")
         .attr("x", xPos)
         .attr("y", yPos + 40)
         .attr("class", "inPlotTextExplanation");

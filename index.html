@@ -30,9 +30,14 @@
             that can be visualized in a scatter-plot as points. </p>
         <p>In the example below we can see that there is a clear difference between some of the shown hands. This might be due
             to different characteristics of the hands or way the hand was placed when it was drawn.</p>
+        <p>Below is a plot off the 40 individual hands, where the hands get highlighted if marked in the PCA scatter plot.</p>
+
         <svg class="allHands"></svg>
-        <p>It's difficult for the human eye to extract any meaningful correlation from a plot as show above. A Principal Component
-            Analysis (PCA) can be used in order to do a deeper analysis of features. </p>
+
+        <p>As we can it's difficult for the human eye to extract any meaningful correlation from a plot as show above.
+            A Principal Component Analysis (PCA) can be used in order to do a deeper analysis of features. For instance
+            we can see if some hand gestures are similar to eachother. This could be useful if we had a list of hand gestures
+            and its meaning, then we could use PCA to find out what a given hand gesture meant.</p>
 
         <h4>All hands on deck, a PCA plot</h4>
         <p>There are no clearly visible clusters among the 40 hands.</p>
@@ -44,9 +49,13 @@
         <svg class="pca">
 
         </svg>
-        <p>By selecting a point on the PCA we get the corresponding hand drawn on the other plot. Selection can be done by clicking a point or by dragging in the container and selecting multiple points. They corresponding hand is drawn in the box to the write (dekstop) or below (mobile). At the same time the hand(s) is/are highlighted in the plot above.</p>
+        <p>By selecting a point on the PCA we get the corresponding hand drawn on the other plot. Selection can be done by
+            clicking a point or by dragging in the container and selecting multiple points. They corresponding hand is drawn
+            in the box to the right (desktop) or below (mobile). At the same time the hand(s) is/are highlighted in the plot above.</p>
         <p>
-            It seems that hands on the right side of the PCA the hands are more dense compared to the hands on the left side. On the top it seems the the right-most fingers are more spread and at the bottom it seems that the left-most fingers are more spread and the right-most fingers are more together.
+            It seems that hands on the right side of the PCA the hands are more dense compared to the hands on the left side.
+            On the top it seems the the right-most fingers are more spread and at the bottom it seems that the left-most fingers
+            are more spread and the right-most fingers are more together.
         </p>
         <h5>Notes</h5>
         <p>Individual part: the 40 hands shown at once is made by Theis Jakobsen and the id shown when hovering points are made
