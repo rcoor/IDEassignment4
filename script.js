@@ -74,6 +74,16 @@ function scatterPCA(data) {
         .attr("class", "tooltip")
         .style("opacity", 0);
 
+    /*    clusterArray = []
+        data.forEach(x => {
+            clusterArray.push([x.x, x.y]);
+        });
+
+        var clusters = clusterfck.hcluster(clusterArray, clusterfck.EUCLIDEAN_DISTANCE,
+            clusterfck.AVERAGE_LINKAGE, 3);
+
+        console.log(clusters);*/
+
     // set the ranges
     var x = d3.scaleLinear().range([0, width]);
     var y = d3.scaleLinear().range([height, 0]);
@@ -84,6 +94,8 @@ function scatterPCA(data) {
         .append("g")
         .attr("transform",
         "translate(" + margin.left + "," + margin.top + ")");
+
+
 
     svg.append("text")
         .text("PC 2")
@@ -109,8 +121,10 @@ function scatterPCA(data) {
         .text("Select a hand to draw its outline")
         .attr("x", xPos)
         .attr("y", yPos + 20)
-        .attr("class", "inPlotTextExplanation")
+        .attr("class", "inPlotTextExplanation");
 
+        // add selection tool
+    selectionTool(svg);
 
     // Scale the range of the data
     x.domain(d3.extent(data, (d) => { return d.x; }));
@@ -160,14 +174,117 @@ function scatterPCA(data) {
                 .attr("cy", y(d.y))
                 .attr("r", 4);
 
-            plotHand(i, handSVG, height, width, 'largeHand');
+            plotHand(i, handSVG, height, width, 'largeHand', true);
 
             d3.selectAll("path.line")
                 .style("fill", "white");
-            d3.select("path.line.id"+i)
+            d3.select("path.line.id" + i)
                 .style("fill", "#EF9A9A");
         });
+
+
+    function choosePointsWithSelection(start, end) {
+        d3.selectAll("path.line")
+            .style("fill", "white");
+
+/*        svg.selectAll("path").remove();
+        svg.selectAll("g").remove();*/
+        d3.selectAll("circle.circle")
+            .each(function (point, i) {
+                d3.select(this).classed("selected", false);
+                if (isInBox(start, end, [x(point.x), y(point.y)])) {
+                    plotHand(i, handSVG, height, width, 'largeHand', false);
+                    d3.select(this).classed("selected", true);
+                    d3.select("path.line.id" + point.label)
+                        .style("fill", "#EF9A9A");
+                }
+            });
+    }
+
+    function isInBox(start, end, point) {
+        const advFluffer = start[0];
+        if (start[0] > end[0]) {
+            start[0] = end[0];
+            end[0] = advFluffer;
+        };
+
+
+        /*    const fluffer = start;
+            if (start[1] < end[1]) {
+                start = end;
+                end = fluffer;
+            };*/
+
+        /*    if (start[1] < end[1]) {
+                start = end;
+                end = fluffer;
+            };*/
+
+        if (start[0] <= point[0] && point[0] <= end[0] && start[1] <= point[1] && point[1] <= end[1])
+            return true;
+        return false;
+    }
+
+
+    function selectionTool(svg) {
+        function rect(x, y, w, h) {
+            return "M" + [x, y] + " l" + [w, 0] + " l" + [0, h] + " l" + [-w, 0] + "z";
+        }
+
+        console.log(svg);
+        var selection = svg.append("path")
+            .attr("class", "selection")
+            .attr("visibility", "hidden");
+
+        var startSelection = function (start) {
+            selection.attr("d", rect(start[0], start[0], 0, 0))
+                .attr("visibility", "visible");
+        };
+
+        var moveSelection = function (start, moved) {
+            selection.attr("d", rect(start[0], start[1], moved[0] - start[0], moved[1] - start[1]));
+        };
+
+        var endSelection = function (start, end) {
+            selection.attr("visibility", "hidden");
+            choosePointsWithSelection(start, end);
+        };
+
+        svg.on("mousedown", function () {
+            var subject = d3.select(window), parent = this.parentNode,
+                start = d3.mouse(parent);
+            startSelection(start);
+            subject
+                .on("mousemove.selection", function () {
+                    console.log(parent);
+                    moveSelection(start, d3.mouse(parent));
+                }).on("mouseup.selection", function () {
+                    endSelection(start, d3.mouse(parent));
+                    subject.on("mousemove.selection", null).on("mouseup.selection", null);
+                });
+        });
+
+        svg.on("touchstart", function () {
+            var subject = d3.select(this), parent = this.parentNode,
+                id = d3.event.changedTouches[0].identifier,
+                start = d3.touch(parent, id), pos;
+            startSelection(start);
+            subject
+                .on("touchmove." + id, function () {
+                    if (pos = d3.touch(parent, id)) {
+                        moveSelection(start, pos);
+                    }
+                }).on("touchend." + id, function () {
+                    if (pos = d3.touch(parent, id)) {
+                        endSelection(start, pos);
+                        subject.on("touchmove." + id, null).on("touchend." + id, null);
+                    }
+                });
+        });
+    }
+
 }
+
 
 function createMultipleHands() {
     var height = 220;
@@ -193,7 +310,7 @@ function createMultipleHands() {
             .attr("x", (newWidth + 10) * count)
             .attr("y", newHeight * countY + 40)
             .attr("class", "handsOverview");
-        plotHand(i, svg2, newHeight, newWidth, 'smallHand');
+        plotHand(i, svg2, newHeight, newWidth, 'smallHand', true);
         if (count >= maxCount - 1) {
             countY += 1;
         }
@@ -213,16 +330,17 @@ function createHandSvg() {
         "translate(" + margin.left + "," + margin.top + ")");
 }
 
-function plotHand(id, svg, height, width, type) {
+function plotHand(id, svg, height, width, type, once) {
     getHands((hands) => {
-        svg.selectAll("path").remove();
-        svg.select("g").remove();
+        if (once) {
+            svg.selectAll("path").remove();
+            svg.selectAll("g").remove();
+        };
         var data = hands[id];
 
         // set the ranges
         var x = d3.scaleLinear().range([0, width]);
         var y = d3.scaleLinear().range([height, 0]);
-
 
         // Scale the range of the data
         x.domain(d3.extent(data, (d) => { return d.x; }));
@@ -246,7 +364,7 @@ function plotHand(id, svg, height, width, type) {
         // Add the valueline path.
         svg.append("path")
             .data([data])
-            .attr("class", "line "+"id"+id)
+            .attr("class", "line " + "id" + id)
             .attr("d", lineGenerator)
             .attr('stroke-dasharray', '2400 2400')
             .attr('stroke-dashoffset', 2400)
@@ -254,4 +372,6 @@ function plotHand(id, svg, height, width, type) {
             .duration(4000)
             .attr('stroke-dashoffset', 0);
     });
+
 }
+
