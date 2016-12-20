@@ -1,0 +1,22 @@
+{
+  "name": "assignment4",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rcoor/IDEassignment4.git"
+  },
+  "author": "Thorn & Grüner",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rcoor/IDEassignment4/issues"
+  },
+  "homepage": "https://github.com/rcoor/IDEassignment4#readme",
+  "dependencies": {
+    "clusterfck": "^0.6.0"
+  }
+}

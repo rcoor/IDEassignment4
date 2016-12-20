@@ -1,7 +1,7 @@
 // set the dimensions and margins of the graph
-var margin = { top: 20, right: 20, bottom: 30, left: 50 },
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+var margin = { top: 20, right: 60, bottom: 30, left: 50 },
+    width = 500 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
 
 // Get and transform hands_pca data into x and y coordinates
 function getPCAHands(callback) {
@@ -22,15 +22,14 @@ function getPCAHands(callback) {
 function getHands(callback) {
     d3.text("./hands.csv", function (text) {
         lastArray = [];
-        var data = d3.csvParseRows(text).map( (row) => {
+        var data = d3.csvParseRows(text).map((row) => {
 
-            var rowItem = row.map( (value) => {
+            var rowItem = row.map((value) => {
                 return +value;
             });
 
             rowX = rowItem.splice(0, 56);
             rowY = rowItem;
-
 
             array = [];
             rowX.forEach((d, i) => {
@@ -43,13 +42,28 @@ function getHands(callback) {
 }
 
 // Use callback to get the formatted data
-
 getPCAHands((PCAhands) => {
     scatterPCA(PCAhands);
-
 });
 
 var handSVG = createHandSvg();
+
+// text
+handSVG.append("text")
+    .text("Select a hand")
+    .attr("x", (width / 2) - 60)
+    .attr("y", height / 2);
+
+handSVG.append("text")
+    .text("The plot shows an outline of hands")
+    .attr("x", -20)
+    .attr("y", height - 20);
+
+handSVG.append("text")
+    .text("from a dataset of 40 hands.")
+    .attr("x", -20)
+    .attr("y", height);
+
 
 function scatterPCA(data) {
 
@@ -57,33 +71,81 @@ function scatterPCA(data) {
     var x = d3.scaleLinear().range([0, width]);
     var y = d3.scaleLinear().range([height, 0]);
 
-    var svg = d3.select("body").append("svg")
+    var svg = d3.select("svg.pca")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform",
         "translate(" + margin.left + "," + margin.top + ")");
+
+    svg.append("text")
+        .text("PC 2")
+        .attr("x", width / 2 - 20)
+        .attr("y", height + margin.bottom);
+
+    svg.append("text")
+        .text("PC 1")
+        .attr("x", - width / 2)
+        .attr("transform", "rotate(-90)")
+        .attr("y", -20);
+
+    // text inside the PCA plot
+    var xPos = 20;
+    var yPos = 50;
+    svg.append("text")
+        .text("40 hands")
+        .attr("x", xPos)
+        .attr("y", yPos)
+        .attr("class", "inPlotText")
+
+    svg.append("text")
+        .text("Select a hand to draw it's outline")
+        .attr("x", xPos)
+        .attr("y", yPos + 20)
+        .attr("class", "inPlotTextExplanation")
+
 
     // Scale the range of the data
     x.domain(d3.extent(data, (d) => { return d.x; }));
     y.domain([d3.min(data, (d) => { return d.y; }), d3.max(data, (d) => { return d.y; })]);
 
     // Add the scatterplot
-    svg.selectAll("dot")
+    var circles = svg.selectAll("dot")
         .data(data)
         .enter().append("circle")
         .attr("class", "circle")
-        .attr("r", 5)
         .attr("cx", (d) => { return x(d.x); })
         .attr("cy", (d) => { return y(d.y); })
-        .on("click", (d, i) => {
+
+    // style the circles
+    var circleStyling = (circles) => {
+        circles.attr("r", 4)
+            .classed("selected", false);
+    }
+
+    // set size of circles
+    circleStyling(circles);
+
+    circles
+        .on("click", function (d, i) {
+            // reset circle sizes
+            circleStyling(circles);
+            d3.select(this).attr("r", 5)
+                .classed("selected", true);
+
+            svg.select("g").remove();
+            svg.append("g").append("circle")
+                .attr("class", "circleSelect")
+                .attr("cx", x(d.x))
+                .attr("cy", y(d.y))
+                .attr("r", 4);
+
             plotHand(i, handSVG);
         });
-
 }
 
 function createHandSvg() {
-    return svg = d3.select("body").append("svg")
+    return svg = d3.select("svg.hands")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
@@ -91,13 +153,10 @@ function createHandSvg() {
         "translate(" + margin.left + "," + margin.top + ")");
 }
 
-
-
-
-
 function plotHand(id, svg) {
     getHands((hands) => {
-        svg.selectAll("*").remove();
+        svg.selectAll("path").remove();
+        svg.select("g").remove();
         var data = hands[id];
 
         // set the ranges
@@ -110,7 +169,8 @@ function plotHand(id, svg) {
         y.domain([0, d3.max(data, (d) => { return d.y; })]);
 
         // Add the scatterplot
-        svg.selectAll("dot")
+        svg.append("g")
+            .selectAll("dot")
             .data(data)
             .enter().append("circle")
             .attr("r", 1)
@@ -118,14 +178,19 @@ function plotHand(id, svg) {
             .attr("cy", (d) => { return y(d.y); });
 
         // define the line
-        var valueline = d3.line()
+        var lineGenerator = d3.line()
             .x((d) => { return x(d.x); })
-            .y((d) => { return y(d.y); });
-
+            .y((d) => { return y(d.y); })
+            .curve(d3.curveCardinal);
         // Add the valueline path.
         svg.append("path")
             .data([data])
             .attr("class", "line")
-            .attr("d", valueline);
+            .attr("d", lineGenerator)
+            .attr('stroke-dasharray', '2400 2400')
+            .attr('stroke-dashoffset', 2400)
+            .transition()
+            .duration(1000)
+            .attr('stroke-dashoffset', 0);
     });
 }

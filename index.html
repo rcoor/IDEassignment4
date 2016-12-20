@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="./node_modules/clusterfck/clusterfck-0.5.0.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi"
         crossorigin="anonymous">
     <link rel="stylesheet" href="./style.css">
@@ -11,10 +12,31 @@
 </head>
 
 <body>
-    <div class="container">
+    <nav class="navbar navbar-light bg-faded">
+        <div class="container">
+            <a class="navbar-brand" href="#">Show of hands</a>
+        </div>
+    </nav>
+    <div class="container" style="margin-top: 100px;">
+<div class="row">
+    <div class="col-md-6">
+        <h4>Principal Component Analysis of hands</h4>
+        <p>We, the human race are quite alike. We have all heard the phrase that we are 99.9% the same – although that this is disputed it is clear that we carry a higher resembles between each other than for example to a Chimpanzee.</p>
+        <p>It is this fact that makes all our small differences even more interesting – we have a very clear basis of comparison. In this example we have 40 individual outlines of hands. Each comes as a set of x- and y-coordinates that can be visualized in a scatter-plot.</p>
+        <h4>All hands on deck, a PCA plot</h4>
+        <p>There are no clearly visible clusters among the 40 hands.</p>
+        <svg class="pca">
 
+        </svg>
     </div>
-    <script src="./script.js"></script>
+    <div class="col-md-6">
+        <svg class="hands">
+
+        </svg>
+    </div>
+</div>
+</div>
+<script src="./script.js"></script>
 </body>
 
 </html>

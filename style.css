@@ -1,10 +1,70 @@
+body, h1, h2, h3, h4, h5, p, text {
+    /*font-family:"nyt-cheltenham",georgia,"times new roman",times,serif;*/
+    font-family: Roboto;
+    font-weight: 300;
+}
+text {
+    /* font-family: nyt-franklin,arial,helvetica,sans-serif;*/
+}
 .circle {
-    fill: white;
-    stroke: black;
-    stroke-width: 1.5px;
+    fill: #cf9950;
+    /*stroke: black;*/
+    stroke-width: 10px;
+    animation: dash 2s ease alternate infinite;
     cursor: pointer;
 }
 
+.selected {
+    fill: #ba3d43;
+    stroke: rgba(0,0,0,0.12);
+   /* stroke-dasharray: 4;*/
+}
+
+.circleSelect {
+    fill: #ba3d43;
+}
+
+path {
+    stroke-width: 3px;
+    fill: white;
+    stroke: #ba3d43;
+}
+
 .circle:hover {
-    fill: black;
+    fill: #ba3d43;
+}
+
+text {
+    font-size: 12px;
+}
+
+p {
+    font-size: 14px;
+    color: #666;
+}
+
+.inPlotText {
+    fill: #cf9950;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.inPlotTextExplanation {
+    font-size: 12px;
+}
+
+@keyframes dash {
+  to {
+    stroke-width: 16px;
+  }
+}
+
+
+/* Page template*/
+.navbar {
+    background: #009688;
+    border-radius: 0;
+}
+nav a.navbar-brand {
+       color: white !important;
 }
