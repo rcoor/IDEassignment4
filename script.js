@@ -13,7 +13,7 @@ function getPCAHands(callback) {
                 return +value;
             }).splice(0, 2);
             c += 1;
-            return { 'x': rowItem[0], 'y': rowItem[1], 'selected': false, 'label': c};
+            return { 'x': rowItem[0], 'y': rowItem[1], 'selected': false, 'label': c };
         });
         callback(data);
     });
@@ -123,15 +123,15 @@ function scatterPCA(data) {
         .attr("class", "circle")
         .attr("cx", (d) => { return x(d.x); })
         .attr("cy", (d) => { return y(d.y); })
-        .on("mouseover", function(d) {
+        .on("mouseover", function (d) {
             div.transition()
                 .duration(200)
                 .style("opacity", .9);
-            div	.html(d.label)
+            div.html(d.label)
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");
         })
-        .on("mouseout", function(d) {
+        .on("mouseout", function (d) {
             div.transition()
                 .duration(500)
                 .style("opacity", 0);
@@ -160,11 +160,12 @@ function scatterPCA(data) {
                 .attr("cy", y(d.y))
                 .attr("r", 4);
 
-            plotHand(i, handSVG, height, width);
+            plotHand(i, handSVG, height, width, 'largeHand');
 
-           /* d3.select("svg.allHands")
-                .each(function (d) { console.log(d) });*/
-                d3.selectAll(d3.select(multipleHands)).each(function(d) {console.log(d)});
+            d3.selectAll("path.line")
+                .style("fill", "white");
+            d3.select("path.line.id"+i)
+                .style("fill", "#ba3d43");
         });
 }
 
@@ -189,10 +190,10 @@ function createMultipleHands() {
         svg2 = svg.append("svg")
             .attr("width", newWidth)
             .attr("height", newHeight)
-            .attr("x", newWidth * count)
+            .attr("x", (newWidth + 10) * count)
             .attr("y", newHeight * countY + 40)
             .attr("class", "handsOverview");
-        plotHand(i, svg2, newHeight, newWidth);
+        plotHand(i, svg2, newHeight, newWidth, 'smallHand');
         if (count >= maxCount - 1) {
             countY += 1;
         }
@@ -203,8 +204,6 @@ function createMultipleHands() {
     return svg;
 }
 
-
-
 function createHandSvg() {
     return svg = d3.select("svg.hands")
         .attr("width", width + margin.left + margin.right)
@@ -214,13 +213,11 @@ function createHandSvg() {
         "translate(" + margin.left + "," + margin.top + ")");
 }
 
-function plotHand(id, svg, height, width) {
+function plotHand(id, svg, height, width, type) {
     getHands((hands) => {
         svg.selectAll("path").remove();
         svg.select("g").remove();
         var data = hands[id];
-
-
 
         // set the ranges
         var x = d3.scaleLinear().range([0, width]);
@@ -231,6 +228,7 @@ function plotHand(id, svg, height, width) {
         x.domain(d3.extent(data, (d) => { return d.x; }));
         y.domain([0, d3.max(data, (d) => { return d.y; })]);
 
+        svg.attr("id", id);
         // Add the scatterplot
         svg.append("g")
             .selectAll("dot")
@@ -248,7 +246,7 @@ function plotHand(id, svg, height, width) {
         // Add the valueline path.
         svg.append("path")
             .data([data])
-            .attr("class", "line")
+            .attr("class", "line "+"id"+id)
             .attr("d", lineGenerator)
             .attr('stroke-dasharray', '2400 2400')
             .attr('stroke-dashoffset', 2400)
