@@ -23,24 +23,30 @@
 <div class="row">
     <div class="col-md-6">
         <h4>Principal Component Analysis of hands</h4>
+principal components using a scatterplot. The axis are not elegant,
+        but there to make it easy to tell the difference between hands. We made the scatterplot interactive by binding the function to
+        draw an outline, to each point.
+
         <p>We, the human race are quite alike. We have all heard the phrase that we are 99.9% the same – although that this
             is disputed it is clear that we carry a higher resembles between each other than for example to a Chimpanzee.</p>
         <p>It is this fact that makes all our small differences even more interesting – we have a very clear basis of comparison.
-            In this example we have <strong>40 individual outlines</strong> of hands. Each comes as a set of x- and y-coordinates
+            In this example we have <strong>40 individual hands</strong> each outlined by 56 points. Each comes as a set of x- and y-coordinates
             that can be visualized in a scatter-plot as points. </p>
         <p>In the example below we can see that there is a clear difference between some of the shown hands. This might be due
             to different characteristics of the hands or way the hand was placed when it was drawn.</p>
-        <p>Below is a plot off the 40 individual hands, where the hands get highlighted if marked in the PCA scatter plot.</p>
+        <p>Below is a plot of the 40 individual hands, where the hands get highlighted if marked in the PCA scatter plot.</p>
 
         <svg class="allHands"></svg>
 
-        <p>As we can it's difficult for the human eye to extract any meaningful correlation from a plot as show above.
+        <p>
+            It's difficult for the human eye to extract any meaningful correlation from a plot as show above.<br/>
+            To make it easier to analyse we made an interactive scatterplot showing the PCAs using only the first two features.<br/>
             A Principal Component Analysis (PCA) can be used in order to do a deeper analysis of features. For instance
-            we can see if some hand gestures are similar to eachother. This could be useful if we had a list of hand gestures
+            we can see if some hand gestures are similar to each other. This could be useful if we had a list of hand gestures
             and its meaning, then we could use PCA to find out what a given hand gesture meant.</p>
 
         <h4>All hands on deck, a PCA plot</h4>
-        <p>There are no clearly visible clusters among the 40 hands.</p>
+        <p>As we can see on below scatterplot, there are no clearly visible clusters among the 40 hands.</p>
 
     </div>
 </div>
@@ -57,6 +63,7 @@
             On the top it seems the the right-most fingers are more spread and at the bottom it seems that the left-most fingers
             are more spread and the right-most fingers are more together.
         </p>
+
         <h5>Notes</h5>
         <p>Individual part: the 40 hands shown at once is made by Theis Jakobsen and the id shown when hovering points are made
             by Christian Grüner. Everything else is made together.</p>
@@ -75,3 +82,4 @@
 </body>
 
 </html>
+

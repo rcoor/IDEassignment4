@@ -146,8 +146,8 @@ function scatterPCA(data) {
             div.transition()
                 .duration(200)
                 .style("opacity", .9);
-            div.html(d.label)
-                .style("left", (d3.event.pageX) + "px")
+            div.html("index: <b>" +d.label + "</b>")
+                .style("left", (d3.event.pageX - 28) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");
         })
         .on("mouseout", function (d) {
