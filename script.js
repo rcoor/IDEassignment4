@@ -64,6 +64,8 @@ handSVG.append("text")
     .attr("x", -20)
     .attr("y", height);
 
+// draw multiple hands
+var multipleHands = createMultipleHands();
 
 function scatterPCA(data) {
 
@@ -99,7 +101,7 @@ function scatterPCA(data) {
         .attr("class", "inPlotText")
 
     svg.append("text")
-        .text("Select a hand to draw it's outline")
+        .text("Select a hand to draw its outline")
         .attr("x", xPos)
         .attr("y", yPos + 20)
         .attr("class", "inPlotTextExplanation")
@@ -141,26 +143,36 @@ function scatterPCA(data) {
                 .attr("r", 4);
 
             plotHand(i, handSVG, height, width);
+
+           /* d3.select("svg.allHands")
+                .each(function (d) { console.log(d) });*/
+                d3.selectAll(d3.select(multipleHands)).each(function(d) {console.log(d)});
         });
 }
 
 function createMultipleHands() {
+    var height = 220;
     var svg = d3.select("svg.allHands")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom);
+
+    svg.append("text")
+        .text("Show of hands: 40 hand outlines")
+        .attr("x", 0)
+        .attr("y", 20)
 
     count = 0;
     maxCount = 8;
     countY = 0;
     maxCountY = 40 / maxCount;
     for (i = 0; i < 40; i++) {
-        var newHeight = (height / maxCount);
+        var newHeight = (height / maxCountY);
         var newWidth = (width / maxCount);
         svg2 = svg.append("svg")
             .attr("width", newWidth)
             .attr("height", newHeight)
             .attr("x", newWidth * count)
-            .attr("y", newHeight * countY)
+            .attr("y", newHeight * countY + 40)
             .attr("class", "handsOverview");
         plotHand(i, svg2, newHeight, newWidth);
         if (count >= maxCount - 1) {
@@ -170,10 +182,10 @@ function createMultipleHands() {
         count = count >= maxCount - 1 ? 0 : count += 1;
 
     }
-
+    return svg;
 }
 
-createMultipleHands();
+
 
 function createHandSvg() {
     return svg = d3.select("svg.hands")
