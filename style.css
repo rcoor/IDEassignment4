@@ -30,6 +30,12 @@ path {
     stroke: #ba3d43;
 }
 
+rect {
+    stroke-width: 3px;
+    fill: white;
+    stroke: #ba3d43;
+}
+
 .handsOverview path {
     stroke: #ba3d43;
     stroke-width: 1.5px;

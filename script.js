@@ -192,12 +192,15 @@ function scatterPCA(data) {
         d3.selectAll("path.line")
             .style("fill", "white");
 
-        /*        svg.selectAll("path").remove();
-                svg.selectAll("g").remove();*/
+        //svg.selectAll("path").remove();
+        //svg.selectAll("g").remove();
         d3.selectAll("circle.circle")
             .each(function (point, i) {
                 d3.select(this).classed("selected", false);
                 if (isInBox(start, end, [x(point.x), y(point.y)])) {
+                    console.log('test');
+                    handSVG.selectAll("path").remove();
+                    handSVG.selectAll("g").remove();
                     plotHand(i, handSVG, height, width, 'largeHand', false);
                     d3.select(this).classed("selected", true);
                     d3.select("path.line.id" + point.label)
@@ -207,11 +210,20 @@ function scatterPCA(data) {
     }
 
     function isInBox(start, end, point) {
-        const advFluffer = start[0];
+        //point = [329.6,155.6];
+        const tmpStartX = start[0];
+        const tmpStartY = start[1];
+
+        // start.x > end.x
         if (start[0] > end[0]) {
             start[0] = end[0];
-            end[0] = advFluffer;
+            end[0] = tmpStartX;
         };
+        if (start[1] > end[1]) {
+            start[1] = end[1];
+            end[1] = tmpStartY;
+        }
+
 
 
         /*    const fluffer = start;
@@ -224,7 +236,7 @@ function scatterPCA(data) {
                 start = end;
                 end = fluffer;
             };*/
-
+        // if starting from left or right top and going down
         if (start[0] <= point[0] && point[0] <= end[0] && start[1] <= point[1] && point[1] <= end[1])
             return true;
         return false;
@@ -259,7 +271,6 @@ function scatterPCA(data) {
             startSelection(start);
             subject
                 .on("mousemove.selection", function () {
-                    console.log(parent);
                     moveSelection(start, d3.mouse(parent));
                 }).on("mouseup.selection", function () {
                     endSelection(start, d3.mouse(parent));
