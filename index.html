@@ -28,23 +28,37 @@
         <p>It is this fact that makes all our small differences even more interesting – we have a very clear basis of comparison.
             In this example we have <strong>40 individual outlines</strong> of hands. Each comes as a set of x- and y-coordinates
             that can be visualized in a scatter-plot as points. </p>
-            <p>In the example below we can see that there is a clear difference between some of the shown hands. This might be due to different characteristics of the hands or way the hand was placed when it was drawn.</p>
+        <p>In the example below we can see that there is a clear difference between some of the shown hands. This might be due
+            to different characteristics of the hands or way the hand was placed when it was drawn.</p>
         <svg class="allHands"></svg>
-        <p>It's difficult for the human eye to extract any meaningful correlation from a plot as show above. A Principal Component Analysis (PCA) can be used in order to do a deeper analysis of features. </p>
+        <p>It's difficult for the human eye to extract any meaningful correlation from a plot as show above. A Principal Component
+            Analysis (PCA) can be used in order to do a deeper analysis of features. </p>
 
         <h4>All hands on deck, a PCA plot</h4>
         <p>There are no clearly visible clusters among the 40 hands.</p>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
         <svg class="pca">
 
         </svg>
+        <p>By selecting a point on the PCA we get the corresponding hand drawn on the other plot.</p>
+        <h5>Notes</h5>
+        <p>Individual part: the 40 hands shown at once is made by Theis Jakobsen and the id shown when hovering points are made
+            by Christian Grüner. Everything else is made together.</p>
     </div>
     <div class="col-md-6">
         <svg class="hands">
 
         </svg>
     </div>
+
 </div>
+
 </div>
+
 <script src="./script.js"></script>
 </body>
 

@@ -123,7 +123,12 @@ function scatterPCA(data) {
         .attr("y", yPos + 20)
         .attr("class", "inPlotTextExplanation");
 
-        // add selection tool
+    svg.append("text")
+        .text("Either click or drag")
+        .attr("x", xPos)
+        .attr("y", yPos + 40)
+        .attr("class", "inPlotTextExplanation");
+    // add selection tool
     selectionTool(svg);
 
     // Scale the range of the data
@@ -187,8 +192,8 @@ function scatterPCA(data) {
         d3.selectAll("path.line")
             .style("fill", "white");
 
-/*        svg.selectAll("path").remove();
-        svg.selectAll("g").remove();*/
+        /*        svg.selectAll("path").remove();
+                svg.selectAll("g").remove();*/
         d3.selectAll("circle.circle")
             .each(function (point, i) {
                 d3.select(this).classed("selected", false);
@@ -230,8 +235,6 @@ function scatterPCA(data) {
         function rect(x, y, w, h) {
             return "M" + [x, y] + " l" + [w, 0] + " l" + [0, h] + " l" + [-w, 0] + "z";
         }
-
-        console.log(svg);
         var selection = svg.append("path")
             .attr("class", "selection")
             .attr("visibility", "hidden");
